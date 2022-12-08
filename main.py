@@ -1,4 +1,6 @@
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QGridLayout, QFileDialog, QListWidget, QAbstractItemView, QCheckBox, QLineEdit
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QGridLayout, QFileDialog, QListWidget, \
+    QAbstractItemView, QCheckBox, QLineEdit
+from PyQt5.QtCore import Qt, QUrl
 from PyPDF2 import PdfFileReader, PdfFileMerger
 import qdarkstyle
 import natsort
@@ -10,6 +12,46 @@ from os.path import expanduser
 def clean_file_name(filename):
     filename = os.path.basename(filename)
     return filename
+
+
+class Listbox_Widget(QListWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+
+        self.full_path_filenames = None
+        self.setAcceptDrops(True)
+
+    def dragEnterEvent(self, event):
+        if event.mimeData().hasUrls:
+            event.accept()
+        else:
+            event.ignore()
+
+    def dragMoveEvent(self, event):
+        if event.mimeData().hasUrls():
+            event.setDropAction(Qt.CopyAction)
+            event.accept()
+        else:
+            event.ignore()
+
+    def dropEvent(self, event):
+        if event.mimeData().hasUrls():
+            event.setDropAction(Qt.CopyAction)
+            event.accept()
+
+            filenames = []
+            clean_filenames = []
+            for url in event.mimeData().urls():
+                if url.isLocalFile():
+                    filenames.append(str(url.toLocalFile()))
+                    clean_filenames.append(clean_file_name(str(url.toLocalFile())))
+                else:
+                    None
+
+            self.addItems(clean_filenames)
+            self.full_path_filenames = filenames
+        else:
+            event.ignore()
 
 
 class MyApp(QWidget):
@@ -35,9 +77,10 @@ class MyApp(QWidget):
         self.clear_button = QPushButton('Clear List')
         self.clear_button.clicked.connect(self.clear)
 
-        self.list_widget = QListWidget()
-        self.list_widget.setDragDropMode(QAbstractItemView.InternalMove)
-        self.list_widget.setAcceptDrops(True)
+        # self.list_widget = QListWidget()
+        # self.list_widget.setDragDropMode(QAbstractItemView.InternalMove)
+        # self.list_widget.setAcceptDrops(True)
+        self.list_widget = Listbox_Widget(self)
 
         self.merge_button = QPushButton('Merge PDFs')
         self.merge_button.clicked.connect(self.mergePDFs)
@@ -63,9 +106,6 @@ class MyApp(QWidget):
         layout.addWidget(self.output_dir_text, 5, 0, 1, 2)
         layout.addWidget(self.output_dir_button, 5, 2)
 
-    def drop_in(self):
-        neco = 5
-
     def add(self):
         file_filter = 'PDF Files (*.pdf);; All Files (*.*)'
         response = QFileDialog.getOpenFileNames(
@@ -76,9 +116,9 @@ class MyApp(QWidget):
             filter=file_filter,
             initialFilter='PDF Files (*.pdf)'
         )
-        files, extension = response
+        files, used_extension = response
 
-        self.files_with_path = files
+        self.list_widget.full_path_filenames = files
 
         for i in range(len(files)):
             cleaned_filename = clean_file_name(files[i])
@@ -98,9 +138,9 @@ class MyApp(QWidget):
     def mergePDFs(self):
         pdfs = []
         # for i in range(self.list_widget.count()):
-            # pdfs.append(self.list_widget.item(i).text())
+        #     pdfs.append(self.list_widget.item(i).text())
 
-        pdfs = self.files_with_path
+        pdfs = self.list_widget.full_path_filenames
 
         if self.sort_check_box.isChecked():
             pdfs = self.files
@@ -117,13 +157,16 @@ class MyApp(QWidget):
         self.clear()
 
     def output_directory(self):
-        self.out_dir= QFileDialog.getExistingDirectory(
+        self.out_dir = QFileDialog.getExistingDirectory(
             self,
             "Open a folder",
             expanduser("~"),
             QFileDialog.ShowDirsOnly
         )
         self.output_dir_text.setText('{}'.format(self.out_dir))
+
+    # def show_warning_messagebox(self):
+
 
 
 if __name__ == '__main__':
