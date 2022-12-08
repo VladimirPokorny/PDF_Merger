@@ -63,6 +63,9 @@ class MyApp(QWidget):
         layout.addWidget(self.output_dir_text, 5, 0, 1, 2)
         layout.addWidget(self.output_dir_button, 5, 2)
 
+    def drop_in(self):
+        neco = 5
+
     def add(self):
         file_filter = 'PDF Files (*.pdf);; All Files (*.*)'
         response = QFileDialog.getOpenFileNames(
