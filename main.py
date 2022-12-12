@@ -20,6 +20,8 @@ class Listbox_Widget(QListWidget):
 
         self.full_path_filenames = None
         self.setAcceptDrops(True)
+        self.setDragEnabled(True)
+        self.setDragDropMode(QAbstractItemView.InternalMove)
 
     def dragEnterEvent(self, event):
         if event.mimeData().hasUrls:
@@ -82,6 +84,8 @@ class MyApp(QWidget):
         # self.list_widget.setAcceptDrops(True)
         self.list_widget = Listbox_Widget(self)
 
+        self.drag_drop = Listbox_Widget(self)
+
         self.merge_button = QPushButton('Merge PDFs')
         self.merge_button.clicked.connect(self.mergePDFs)
 
@@ -94,17 +98,18 @@ class MyApp(QWidget):
 
         self.sort_check_box = QCheckBox('Sort Alphabetically')
 
-        layout.addWidget(self.list_widget, 1, 0, 3, 4)
+        layout.addWidget(self.list_widget, 1, 0, 3, 2)
+        layout.addWidget(self.drag_drop, 1, 2, 3, 2)
 
         layout.addWidget(self.add_button, 0, 0)
         layout.addWidget(self.remove_button, 0, 1)
         layout.addWidget(self.clear_button, 0, 2)
 
-        layout.addWidget(self.sort_check_box, 4, 3)
-        layout.addWidget(self.merge_button, 5, 3)
+        layout.addWidget(self.sort_check_box, 5, 3)
+        layout.addWidget(self.merge_button, 6, 3)
 
-        layout.addWidget(self.output_dir_text, 5, 0, 1, 2)
-        layout.addWidget(self.output_dir_button, 5, 2)
+        layout.addWidget(self.output_dir_text, 6, 0, 1, 2)
+        layout.addWidget(self.output_dir_button, 6, 2)
 
     def add(self):
         file_filter = 'PDF Files (*.pdf);; All Files (*.*)'
