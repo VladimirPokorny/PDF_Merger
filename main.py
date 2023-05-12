@@ -50,14 +50,11 @@ class MyApp(QWidget):
         self.sort_check_box = QCheckBox('Sort Alphabetically')
 
         layout.addWidget(self.list_widget, 1, 0, 3, 4)
-
         layout.addWidget(self.add_button, 0, 0)
         layout.addWidget(self.remove_button, 0, 1)
         layout.addWidget(self.clear_button, 0, 2)
-
         layout.addWidget(self.sort_check_box, 4, 3)
         layout.addWidget(self.merge_button, 5, 3)
-
         layout.addWidget(self.output_dir_text, 5, 0, 1, 2)
         layout.addWidget(self.output_dir_button, 5, 2)
 
@@ -108,7 +105,7 @@ class MyApp(QWidget):
         merger.write(self.out_dir + '/' + 'Merged.pdf')
         merger.close()
         self.clear()
-        
+
     def output_directory(self):
         self.out_dir = QFileDialog.getExistingDirectory(self,
                                                         'Open a folder',
