@@ -122,6 +122,9 @@ class MyApp(QWidget):
         self.output_dir_text.setText('{}'.format(self.out_dir))
 
 
+
+
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     app.setStyleSheet('''
