@@ -94,7 +94,7 @@ class MyApp(QWidget):
     def mergePDFs(self):
         pdfs = []
         # for i in range(self.list_widget.count()):
-            # pdfs.append(self.list_widget.item(i).text())
+        # pdfs.append(self.list_widget.item(i).text())
 
         pdfs = self.files_with_path
 
@@ -113,7 +113,7 @@ class MyApp(QWidget):
         self.clear()
 
     def output_directory(self):
-        self.out_dir= QFileDialog.getExistingDirectory(
+        self.out_dir = QFileDialog.getExistingDirectory(
             self,
             "Open a folder",
             expanduser("~"),
