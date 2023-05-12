@@ -107,8 +107,8 @@ class MyApp(QWidget):
 
         merger.write(self.out_dir + '/' + 'Merged.pdf')
         merger.close()
-
         self.clear()
+        
 
     def output_directory(self):
         self.out_dir = QFileDialog.getExistingDirectory(self,
