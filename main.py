@@ -3,7 +3,6 @@ from PyPDF2 import PdfFileReader, PdfFileMerger
 import natsort
 import sys
 import os
-from os.path import expanduser
 
 
 def clean_file_name(filename):
@@ -68,14 +67,12 @@ class MyApp(QWidget):
             parent=self,
             caption='Select a PDF file',
             directory=os.getcwd(),
-            # directory=os.path.expanduser('~'),
             filter=file_filter,
             initialFilter='PDF Files (*.pdf)'
         )
         files, extension = response
 
         self.files_with_path = files
-
 
         for i in range(len(files)):
             cleaned_filename = clean_file_name(files[i])
@@ -114,12 +111,11 @@ class MyApp(QWidget):
         self.clear()
 
     def output_directory(self):
-        self.out_dir = QFileDialog.getExistingDirectory(
-            self,
-            "Open a folder",
-            expanduser("~"),
-            QFileDialog.ShowDirsOnly
-        )
+        self.out_dir = QFileDialog.getExistingDirectory(self,
+                                                        'Open a folder',
+                                                        os.path.expanduser('~'),
+                                                        QFileDialog.ShowDirsOnly
+                                                        )
         self.output_dir_text.setText('{}'.format(self.out_dir))
 
 
@@ -132,10 +128,6 @@ if __name__ == '__main__':
     ''')
 
     myApp = MyApp()
-
-    # dark_stylesheet = qdarkstyle.load_stylesheet_pyqt5()
-    # myApp.setStyleSheet(dark_stylesheet)
-
     myApp.show()
 
     try:
