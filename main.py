@@ -107,11 +107,12 @@ class MyApp(QWidget):
         self.clear()
 
     def output_directory(self):
-        self.out_dir = QFileDialog.getExistingDirectory(self,
-                                                        'Open a folder',
-                                                        os.path.expanduser('~'),
-                                                        QFileDialog.ShowDirsOnly
-                                                        )
+        self.out_dir = QFileDialog.getExistingDirectory(
+            self,
+            'Open a folder',
+            os.path.expanduser('~'),
+            QFileDialog.ShowDirsOnly
+        )
         self.output_dir_text.setText('{}'.format(self.out_dir))
 
 
