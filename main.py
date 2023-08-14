@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QGridLayout, QFileDialog, QListWidget, QAbstractItemView, QCheckBox, QLineEdit
+from PyQt5 import QtWidgets
 from PyPDF2 import PdfFileReader, PdfFileMerger
 import natsort
 import sys
@@ -10,7 +10,7 @@ def clean_file_name(filename):
     return filename
 
 
-class MyApp(QWidget):
+class MyApp(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
 
@@ -21,33 +21,33 @@ class MyApp(QWidget):
         self.files_with_path = None
         self.out_dir = os.path.expanduser('~') + '/PDF_Merger-Output'
 
-        layout = QGridLayout()
+        layout = QtWidgets.QGridLayout()
         self.setLayout(layout)
 
-        self.add_button = QPushButton('Import Files')
+        self.add_button = QtWidgets.QPushButton('Import Files')
         self.add_button.clicked.connect(self.add)
 
-        self.remove_button = QPushButton('Delete Selected')
+        self.remove_button = QtWidgets.QPushButton('Delete Selected')
         self.remove_button.clicked.connect(self.remove)
 
-        self.clear_button = QPushButton('Clear List')
+        self.clear_button = QtWidgets.QPushButton('Clear List')
         self.clear_button.clicked.connect(self.clear)
 
-        self.list_widget = QListWidget()
-        self.list_widget.setDragDropMode(QAbstractItemView.InternalMove)
+        self.list_widget = QtWidgets.QListWidget()
+        self.list_widget.setDragDropMode(QtWidgets.QAbstractItemView.InternalMove)
         self.list_widget.setAcceptDrops(True)
 
-        self.merge_button = QPushButton('Merge PDFs')
+        self.merge_button = QtWidgets.QPushButton('Merge PDFs')
         self.merge_button.clicked.connect(self.mergePDFs)
 
-        self.output_dir_text = QLineEdit()
+        self.output_dir_text = QtWidgets.QLineEdit()
         self.output_dir_text.setEnabled(False)
         self.output_dir_text.setText('{}'.format(self.out_dir))
 
-        self.output_dir_button = QPushButton('Output Directory')
+        self.output_dir_button = QtWidgets.QPushButton('Output Directory')
         self.output_dir_button.clicked.connect(self.output_directory)
 
-        self.sort_check_box = QCheckBox('Sort Alphabetically')
+        self.sort_check_box = QtWidgets.QCheckBox('Sort Alphabetically')
 
         layout.addWidget(self.list_widget, 1, 0, 3, 4)
         layout.addWidget(self.add_button, 0, 0)
@@ -60,7 +60,7 @@ class MyApp(QWidget):
 
     def add(self):
         file_filter = 'PDF Files (*.pdf);; All Files (*.*)'
-        response = QFileDialog.getOpenFileNames(
+        response = QtWidgets.QFileDialog.getOpenFileNames(
             parent=self,
             caption='Select a PDF file',
             directory=os.getcwd(),
@@ -107,16 +107,17 @@ class MyApp(QWidget):
         self.clear()
 
     def output_directory(self):
-        self.out_dir = QFileDialog.getExistingDirectory(self,
-                                                        'Open a folder',
-                                                        os.path.expanduser('~'),
-                                                        QFileDialog.ShowDirsOnly
-                                                        )
+        self.out_dir = QtWidgets.QFileDialog.getExistingDirectory(
+            self,
+            'Open a folder',
+            os.path.expanduser('~'),
+            QtWidgets.QFileDialog.ShowDirsOnly
+        )
         self.output_dir_text.setText('{}'.format(self.out_dir))
 
 
 if __name__ == '__main__':
-    app = QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     app.setStyleSheet('''
         QWidget {
             font-size: 15px;
